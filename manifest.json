@@ -1,0 +1,9 @@
+{
+  "name": "BM Diário da Qualidade v3.0",
+  "short_name": "BM Qualidade",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#eef1f4",
+  "theme_color": "#44546A",
+  "icons": []
+}

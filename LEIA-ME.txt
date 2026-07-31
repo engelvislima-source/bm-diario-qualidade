@@ -1,8 +1,0 @@
-BM DIÁRIO DA QUALIDADE v4.0 — ETAPA 1
-
-Arquivos prontos para GitHub Pages.
-1. Exclua os arquivos antigos do repositório ou envie estes substituindo os existentes.
-2. Mantenha todos os nomes exatamente como estão.
-3. O aplicativo salva os dados no navegador usando IndexedDB.
-4. Use o botão "Baixar backup" regularmente.
-5. Nesta etapa ainda não foram incluídos PDF e Excel.

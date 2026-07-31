@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#44546a">
+  <meta name="description" content="Diário da Qualidade para inspeções, ocorrências, fotos, relatórios e histórico de obras.">
+  <title>BM Diário da Qualidade v4</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <img src="logo.png" alt="BM" class="top-logo">
+  <div><strong>BM Diário da Qualidade</strong><small>Gestão de inspeções e ocorrências</small></div>
+</header>
+<main>
+  <section id="home" class="screen active">
+    <div class="card hero">
+      <h1>Diário da Qualidade</h1>
+      <p>Cadastre vistorias, registre ocorrências com fotos, acompanhe pendências e gere relatórios.</p>
+      <div class="actions">
+        <button class="primary" data-action="new">+ Novo diário</button>
+        <button data-screen="history">Histórico</button>
+      </div>
+    </div>
+    <div class="summary-grid">
+      <div class="metric"><span id="metricDiaries">0</span><small>Diários</small></div>
+      <div class="metric"><span id="metricOpen">0</span><small>Pendências abertas</small></div>
+      <div class="metric"><span id="metricDone">0</span><small>Concluídas</small></div>
+      <div class="metric"><span id="metricPhotos">0</span><small>Fotos</small></div>
+    </div>
+    <div class="card"><h2>Versão completa</h2><p class="muted">Cadastro, fotos, histórico, checklist, apontamentos, PDF por impressão, Excel, backup e funcionamento offline. Sem IA.</p></div>
+  </section>
+
+  <section id="diary" class="screen">
+    <div class="card">
+      <div class="title-row"><h2>Dados do diário</h2><button data-screen="home">Voltar</button></div>
+      <div class="grid2">
+        <label>Obra<select id="obra"></select></label>
+        <label id="moduleWrap" class="hidden">Módulo<select id="modulo"></select></label>
+        <label>Data<input id="data" type="date"></label>
+        <label>Dia da semana<input id="diaSemana" readonly></label>
+        <label>Endereço<input id="endereco"></label>
+        <label>Cidade/UF<input id="cidade"></label>
+        <label>Fase da obra<input id="fase"></label>
+        <label>Engenheiro responsável<input id="engenheiro"></label>
+        <label>Engenheiro coordenador<input id="engCoordenador"></label>
+        <label>Responsável pela qualidade<input id="qualidade" value="Elvis Lima"></label>
+        <label>Assistente de engenharia<input id="assistente"></label>
+        <label>Encarregado<input id="encarregado"></label>
+      </div>
+      <label>Observação geral<textarea id="observacaoGeral" rows="3"></textarea></label>
+      <div class="actions">
+        <button class="primary" data-action="save-header">Salvar dados</button>
+        <button data-screen="records">Registrar ocorrências</button>
+        <button data-screen="checklist">Checklist</button>
+        <button data-screen="notes">Apontamentos</button>
+        <button data-action="report">Visualizar relatório</button>
+        <button class="excel" data-action="excel">Exportar Excel</button>
+        <button data-action="finish">Finalizar diário</button>
+      </div>
+      <div id="saveStatus" class="status"></div>
+    </div>
+  </section>
+
+  <section id="records" class="screen">
+    <div class="card">
+      <div class="title-row"><h2 id="recordFormTitle">Nova ocorrência</h2><button data-screen="diary">Voltar</button></div>
+      <div class="grid2">
+        <label>Bloco<select id="bloco"></select></label>
+        <label>Pavimento<select id="pavimento"></select></label>
+        <label>Apartamento/local<select id="apartamento"></select></label>
+        <label>Ambiente<select id="ambiente"></select></label>
+        <label>Classificação<select id="classificacao"></select></label>
+        <label>Serviço<select id="servico"></select></label>
+        <label>Empreiteiro/responsável<input id="responsavelReg"></label>
+        <label>Apontado por<input id="apontadoPor" value="Elvis Lima"></label>
+        <label>Data da ocorrência<input id="dataOcorrencia" type="date"></label>
+        <label>Hora<input id="horaOcorrencia" type="time"></label>
+        <label>Status<select id="statusReg"><option>Pendente</option><option>Em andamento</option><option>Concluído</option><option>Reprovado</option></select></label>
+        <label>Prazo<input id="prazo" type="date"></label>
+      </div>
+      <label>Descrição da não conformidade<textarea id="descricao" rows="4" placeholder="Descreva tecnicamente a não conformidade."></textarea></label>
+      <label>Recomendação técnica<textarea id="recomendacao" rows="3" placeholder="Descreva a correção necessária."></textarea></label>
+      <label>Fotos<input id="fotos" type="file" accept="image/*" capture="environment" multiple></label>
+      <div class="field-help">Até 12 fotos por ocorrência. As imagens são comprimidas antes de serem salvas.</div>
+      <div id="photoPreview" class="photo-preview"></div>
+      <div class="actions"><button class="primary" data-action="save-record" id="saveRecordBtn">Salvar ocorrência</button><button class="hidden" data-action="cancel-edit" id="cancelEditBtn">Cancelar edição</button></div>
+    </div>
+    <div class="card"><div class="title-row"><h2>Registros deste diário</h2><span id="recordCount" class="badge">0</span></div><div id="recordList"></div></div>
+  </section>
+
+  <section id="checklist" class="screen">
+    <div class="card">
+      <div class="title-row"><h2>Relatório de ocorrências</h2><button data-screen="diary">Voltar</button></div>
+      <div id="checklistFields"></div>
+      <button class="primary" data-action="save-checklist">Salvar checklist</button>
+    </div>
+  </section>
+
+  <section id="notes" class="screen">
+    <div class="card">
+      <div class="title-row"><h2>Relatório de apontamento</h2><button data-screen="diary">Voltar</button></div>
+      <div class="grid2">
+        <label>Nome<input id="noteName"></label>
+        <label>Data da orientação<input id="noteDate" type="date"></label>
+      </div>
+      <label>Descrição da orientação<textarea id="noteText" rows="4"></textarea></label>
+      <label>Data da resolução<input id="noteResolution" type="date"></label>
+      <div class="actions"><button class="primary" data-action="add-note">Adicionar apontamento</button></div>
+      <div id="noteList"></div>
+    </div>
+  </section>
+
+  <section id="history" class="screen">
+    <div class="card">
+      <div class="title-row"><h2>Histórico</h2><button data-screen="home">Voltar</button></div>
+      <div class="grid3">
+        <label>Pesquisar<input id="historySearch" placeholder="Obra, serviço, bloco, empreiteiro ou descrição"></label>
+        <label>Obra<select id="historyWork"><option value="">Todas</option></select></label>
+        <label>Status<select id="historyStatus"><option value="">Todos</option><option>Em andamento</option><option>Finalizado</option></select></label>
+      </div>
+      <div class="actions"><button data-action="export-backup">Baixar backup</button><label class="file-button">Importar backup<input id="backupFile" type="file" accept="application/json"></label></div>
+      <div id="historyList"></div>
+    </div>
+  </section>
+
+  <section id="report" class="screen report-screen">
+    <div class="report-actions"><button data-screen="diary">Voltar</button><button class="primary" data-action="print">Imprimir / Salvar PDF</button><button class="excel" data-action="excel">Exportar Excel</button></div>
+    <div id="reportContent" class="paper"></div>
+  </section>
+</main>
+
+<div id="photoModal" class="modal hidden" role="dialog" aria-modal="true"><button class="modal-close" data-action="close-photo">×</button><img id="modalImage" alt="Foto ampliada"></div>
+<div id="toast" class="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>

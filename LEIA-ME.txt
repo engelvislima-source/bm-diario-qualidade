@@ -1,0 +1,26 @@
+BM DIÁRIO DA QUALIDADE v4 - PROJETO COMPLETO
+
+Arquivos para publicar na raiz do GitHub Pages:
+- index.html
+- style.css
+- app.js
+- manifest.json
+- service-worker.js
+- logo.png
+- pasta icons
+
+FUNCIONALIDADES
+- Novo diário e histórico
+- IndexedDB
+- Ocorrências, fotos e status
+- Checklist
+- Apontamentos
+- Relatório para impressão/PDF
+- Exportação Excel (.xls compatível com Excel)
+- Backup JSON
+- PWA e funcionamento offline
+- Sem IA
+
+PUBLICAÇÃO
+Envie o conteúdo desta pasta para a raiz do repositório e mantenha a pasta icons.
+Depois aguarde o GitHub Pages atualizar e use Ctrl+F5 no primeiro acesso.

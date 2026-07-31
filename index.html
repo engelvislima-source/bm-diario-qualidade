@@ -2,192 +2,82 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#44546A">
-  <title>BM Diário da Qualidade v3.0</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#44546a">
+  <title>BM Diário da Qualidade v4</title>
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 </head>
 <body>
 <header class="topbar">
-  <img src="logo.png" alt="Bela Mares">
-  <div>
-    <strong>BM Diário da Qualidade</strong>
-    <small>Registro de inspeções e geração do diário</small>
-  </div>
+  <div class="brandmark">BM</div>
+  <div><strong>BM Diário da Qualidade</strong><small>Registro de inspeções em obra</small></div>
 </header>
-
 <main>
   <section id="home" class="screen active">
-    <div class="card">
+    <div class="card hero">
       <h1>Diário da Qualidade</h1>
-      <p>Registre fotos, ocorrências e apontamentos durante a visita.</p>
-      <button class="primary" onclick="newDiary()">+ Novo diário</button>
-      <button onclick="showScreen('history')">Histórico</button>
+      <p>Cadastre a vistoria, registre ocorrências com fotos e consulte o histórico.</p>
+      <div class="actions"><button class="primary" data-action="new">+ Novo diário</button><button data-screen="history">Histórico</button></div>
     </div>
+    <div class="card"><h2>Versão 4.0 — Etapa 1</h2><p class="muted">Cadastro, fotos, armazenamento local, histórico e backup. Sem inteligência artificial.</p></div>
   </section>
 
   <section id="diary" class="screen">
     <div class="card">
-      <div class="row between">
-        <h2>Dados do diário</h2>
-        <button class="ghost" onclick="showScreen('home')">Voltar</button>
-      </div>
+      <div class="title-row"><h2>Dados do diário</h2><button data-screen="home">Voltar</button></div>
       <div class="grid2">
-        <label>Obra
-          <select id="obra" onchange="onWorkChange()"></select>
-        </label>
-        <label id="moduleWrap" class="hidden">Módulo
-          <select id="modulo" onchange="populateBlocks()"></select>
-        </label>
-        <label>Data
-          <input id="data" type="date" onchange="updateWeekdayPreview()">
-        </label>
-        <label>Dia da semana
-          <input id="diaSemana" readonly>
-        </label>
-        <label>Endereço
-          <input id="endereco" value="Valparaíso de Goiás">
-        </label>
-        <label>Cidade/UF
-          <input id="cidade" value="Valparaíso de Goiás - GO">
-        </label>
-        <label>Fase da obra
-          <input id="fase" value="Acabamento / Pós-obra">
-        </label>
-        <label>Eng. responsável
-          <input id="engenheiro">
-        </label>
-        <label>Eng. coordenador
-          <input id="engCoordenador">
-        </label>
-        <label>Responsável qualidade
-          <input id="qualidade" value="Elvis Lima">
-        </label>
-        <label>Assistente de engenharia
-          <input id="assistente">
-        </label>
-        <label>Encarregado
-          <input id="encarregado">
-        </label>
+        <label>Obra<select id="obra"></select></label>
+        <label id="moduleWrap" class="hidden">Módulo<select id="modulo"></select></label>
+        <label>Data<input id="data" type="date"></label>
+        <label>Dia da semana<input id="diaSemana" readonly></label>
+        <label>Fase da obra<input id="fase" placeholder="Ex.: Acabamento"></label>
+        <label>Responsável pela qualidade<input id="qualidade" value="Elvis Lima"></label>
+        <label>Engenheiro responsável<input id="engenheiro"></label>
+        <label>Encarregado<input id="encarregado"></label>
       </div>
+      <label>Observação geral<textarea id="observacaoGeral" rows="3"></textarea></label>
       <div class="actions">
-        <button class="primary" onclick="saveHeader()">Salvar dados</button>
-        <button onclick="showScreen('records')">Registrar fotos/ocorrências</button>
-        <button onclick="showScreen('checklist')">Relatório de ocorrências</button>
-        <button onclick="showScreen('notes')">Apontamentos</button>
-        <button class="success" onclick="renderReport()">Gerar diário (PDF)</button>
-        <button class="excel" onclick="exportExcel()">Exportar Excel</button>
+        <button class="primary" data-action="save-header">Salvar dados</button>
+        <button data-screen="records">Registrar ocorrências</button>
+        <button data-action="finish">Finalizar diário</button>
       </div>
+      <div id="saveStatus" class="status"></div>
     </div>
   </section>
 
   <section id="records" class="screen">
     <div class="card">
-      <div class="row between">
-        <h2>Fotos e ocorrências</h2>
-        <button class="ghost" onclick="showScreen('diary')">Voltar</button>
-      </div>
+      <div class="title-row"><h2>Ocorrências</h2><button data-screen="diary">Voltar</button></div>
       <div class="grid2">
-        <label>Bloco
-          <select id="bloco" onchange="updatePhotoCaptionPreview()"></select>
-        </label>
-        <label>Apartamento
-          <select id="apartamento" onchange="updatePhotoCaptionPreview()"></select>
-        </label>
-        <label>Ambiente
-          <select id="ambiente" onchange="updatePhotoCaptionPreview()"></select>
-        </label>
-        <label>Serviço
-          <select id="servico" onchange="updatePhotoCaptionPreview()"></select>
-        </label>
-        <label>Responsável/empreiteiro
-          <input id="responsavelReg">
-        </label>
-        <label>Prazo
-          <input id="prazo" type="date">
-        </label>
+        <label>Bloco<select id="bloco"></select></label>
+        <label>Pavimento<select id="pavimento"></select></label>
+        <label>Apartamento/local<select id="apartamento"></select></label>
+        <label>Ambiente<select id="ambiente"></select></label>
+        <label>Serviço<select id="servico"></select></label>
+        <label>Empreiteiro/responsável<input id="responsavelReg"></label>
+        <label>Status<select id="statusReg"><option>Pendente</option><option>Em correção</option><option>Concluído</option></select></label>
+        <label>Prazo<input id="prazo" type="date"></label>
       </div>
-      <div class="auto-caption-box">
-        <strong>Descrição da foto automática</strong>
-        <div id="photoCaptionPreview" class="caption-preview">Selecione os dados do registro.</div>
-        <small>Gerada automaticamente com serviço, bloco, apartamento e ambiente.</small>
-      </div>
-      <label>Apontamento técnico (opcional)
-        <textarea id="descricao" rows="4" placeholder="Descreva a não conformidade e a solução, se houver."></textarea>
-      </label>
-      <label>Foto
-        <input id="foto" type="file" accept="image/*" capture="environment">
-      </label>
-      <label class="checkbox-label">
-        <input id="generateNote" type="checkbox"> Também adicionar este apontamento ao relatório de apontamento
-      </label>
-      <div class="actions">
-        <button class="primary" onclick="addRecord()">Salvar registro</button>
-      </div>
-      <div id="recordList" class="list"></div>
+      <label>Descrição técnica<textarea id="descricao" rows="4" placeholder="Ex.: Revestimento cerâmico com som cavo. Remover e reassentar as peças afetadas."></textarea></label>
+      <label>Fotos<input id="fotos" type="file" accept="image/*" capture="environment" multiple></label>
+      <div id="photoPreview" class="photo-preview"></div>
+      <div class="actions"><button class="primary" data-action="add-record">Salvar ocorrência</button></div>
     </div>
-  </section>
-
-  <section id="checklist" class="screen">
-    <div class="card">
-      <div class="row between">
-        <h2>Relatório de ocorrências</h2>
-        <button class="ghost" onclick="showScreen('diary')">Voltar</button>
-      </div>
-      <div id="checklistFields"></div>
-      <button class="primary" onclick="saveChecklist()">Salvar checklist</button>
-    </div>
-  </section>
-
-  <section id="notes" class="screen">
-    <div class="card">
-      <div class="row between">
-        <h2>Relatório de apontamento</h2>
-        <button class="ghost" onclick="showScreen('diary')">Voltar</button>
-      </div>
-      <div class="grid2">
-        <label>Apontado por
-          <input id="noteName" placeholder="Nome de quem está apontando">
-        </label>
-        <label>Data da orientação
-          <input id="noteDate" type="date">
-        </label>
-      </div>
-      <label>Descrição da orientação
-        <textarea id="noteText" rows="4" placeholder="Descreva a orientação técnica passada em obra."></textarea>
-      </label>
-      <label>Data da resolução
-        <input id="noteResolution" type="date">
-      </label>
-      <button class="primary" onclick="addNote()">Adicionar apontamento</button>
-      <div id="noteList" class="list"></div>
-    </div>
+    <div class="card"><h2>Registros deste diário</h2><div id="recordList"></div></div>
   </section>
 
   <section id="history" class="screen">
     <div class="card">
-      <div class="row between">
-        <h2>Histórico</h2>
-        <button class="ghost" onclick="showScreen('home')">Voltar</button>
-      </div>
+      <div class="title-row"><h2>Histórico</h2><button data-screen="home">Voltar</button></div>
+      <div class="grid2"><label>Pesquisar<input id="historySearch" placeholder="Obra, serviço, bloco ou descrição"></label><label>Filtrar por obra<select id="historyWork"><option value="">Todas</option></select></label></div>
+      <div class="actions"><button data-action="export-backup">Baixar backup</button><label class="file-button">Importar backup<input id="backupFile" type="file" accept="application/json"></label></div>
       <div id="historyList"></div>
     </div>
   </section>
-
-  <section id="report" class="screen report-screen">
-    <div class="report-actions">
-      <button onclick="showScreen('diary')">Voltar</button>
-      <button class="primary" onclick="window.print()">Imprimir / Salvar PDF</button>
-      <button class="excel" onclick="exportExcel()">Exportar Excel</button>
-      <button onclick="downloadBackup()">Baixar backup</button>
-    </div>
-    <div id="reportContent" class="paper"></div>
-  </section>
 </main>
-
+<div id="toast" class="toast" role="status"></div>
 <script src="app.js"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js")}</script>
 </body>
 </html>
